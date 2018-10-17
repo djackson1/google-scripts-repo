@@ -99,15 +99,16 @@ function getNewToken(oAuth2Client, callback) {
 "A".charCodeAt(0) = 65
 "a".charCodeAt(0) = 97
 */
-const changeColumnWidth = (column, columnSize) => {
-
+const changeColumnWidth = (sheetId, column, columnSize) => {
+  const columnRawIndex = column.charCodeAt(0)
+  const columnIndex = columnRawIndex >= 97 ? columnRawIndex - 97 : columnRawIndex - 65
   return {
     "updateDimensionProperties": {
       "range": {
         "sheetId": sheetId,
         "dimension": "COLUMNS",
-        "startIndex": 0,
-        "endIndex": 1
+        "startIndex": columnIndex,
+        "endIndex": columnIndex + 1
       },
       "properties": {
         "pixelSize": columnSize
@@ -141,7 +142,8 @@ const getSheets = async () => {
 }
 
 module.exports = {
-  getSheets,
-  getColumnValues,
   batchGet,
+  changeColumnWidth,
+  getColumnValues,
+  getSheets,
 }
